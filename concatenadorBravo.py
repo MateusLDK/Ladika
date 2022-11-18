@@ -7,7 +7,7 @@ import time
 finalDF = pd.DataFrame()
 colunasValidas = ["NUMERO CTRC", "NUMERO CT-E", "PLACA DE COLETA", "CLIENTE REMETENTE",	"CLIENTE DESTINATARIO",	"ENDERECO RECEBEDOR", 
                     "CIDADE ENTREGA", "UF ENTREGA", "CEP ENTREGA", "NOTA FISCAL", "FRETE PESO", "OUTROS", "VAL RECEBER", 
-                    "NUMERO DA FATURA", "DATA ENTREGA"]
+                    "NUMERO DA FATURA", "DATA ENTREGA", "IMPOSTOS REPAS", "ICMS TRANSP"]
 
 filePath = fd.askdirectory()
 timeStart = time.time()
@@ -27,5 +27,5 @@ print("concluído!")
 
 print("tempo de execução: ",end='')
 print(timeEnd-timeStart)
-print("linhas finalizadas: ",end='')
-print(len(finalDF))
+print("Células finalizadas: ",end='')
+print(len(finalDF)*len(finalDF.index))
