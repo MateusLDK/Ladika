@@ -24,7 +24,7 @@ for f in arquivosCSV:
 finalDF = tempDF2.loc[:,["NUMERO DA FATURA", "NOTA FISCAL", "NUMERO CTRC", "NUMERO CT-E", "DATA ENTREGA",  
                             "CLIENTE REMETENTE", "CLIENTE DESTINATARIO", "PLACA DE COLETA", "ENDERECO RECEBEDOR", "CIDADE ENTREGA", "UF ENTREGA", 
                             "FRETE PESO", "OUTROS", "VAL RECEBER"]]
-finalDF.to_csv('final/PlanilhaTotal.csv', encoding = "ISO-8859-1", sep=';', index=False, header=True)
+finalDF.to_csv('PlanilhaTotal.csv', encoding = "ISO-8859-1", sep=';', index=False, header=True)
 timeEnd = time.time()
 
 print("concluído!")
