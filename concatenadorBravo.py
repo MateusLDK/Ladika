@@ -7,8 +7,8 @@ import time
 finalDF = pd.DataFrame()
 tempDF2 = pd.DataFrame()
 colunasValidas = ["NUMERO CTRC", "NUMERO CT-E", "PLACA DE COLETA", "CLIENTE REMETENTE",	"CLIENTE DESTINATARIO",	"ENDERECO RECEBEDOR", 
-                    "CIDADE ENTREGA", "UF ENTREGA", "CEP ENTREGA", "NOTA FISCAL", "FRETE PESO", "OUTROS", "VAL RECEBER", 
-                    "NUMERO DA FATURA", "DATA ENTREGA", "IMPOSTOS REPAS", "ICMS TRANSP"]
+                  "CIDADE ENTREGA", "UF ENTREGA", "CEP ENTREGA", "NOTA FISCAL", "FRETE PESO", "OUTROS", "VAL RECEBER", 
+                  "NUMERO DA FATURA", "DATA ENTREGA", "IMPOSTOS REPAS", "ICMS TRANSP"]
 
 filePath = fd.askdirectory()
 timeStart = time.time()
