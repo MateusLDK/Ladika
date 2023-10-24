@@ -53,7 +53,11 @@ def processarArquivos(k):
             k+=4
             pass
 
-if __name__ == "__main__":
+def converterNotas(filePath):
+    global listaNotas
+    global arquivosPDF
+    global popplerPath
+    global arquivosJPG
 
     listaNotas = {}
     arquivosPDF = {}
@@ -61,7 +65,7 @@ if __name__ == "__main__":
 
     pytesseract.pytesseract.tesseract_cmd = r"C:\Users\mladika\AppData\Local\Programs\Tesseract-OCR\tesseract.exe"
 
-    filePath = fd.askdirectory()
+    #filePath = fd.askdirectory()
     os.chdir(filePath)
     localArquivos = os.getcwd()
 
@@ -107,4 +111,4 @@ if __name__ == "__main__":
     dataFrame['CTRC'] = pd.to_numeric(dataFrame['CTRC'])
     dataFrame['NF'] = pd.to_numeric(dataFrame['NF'])
 
-    dataFrame.to_csv('PlanilhaNotas.csv', encoding = "ISO-8859-1", sep=';', index=False, header=True)
+    return dataFrame
