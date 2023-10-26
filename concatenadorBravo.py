@@ -40,11 +40,13 @@ for i in range(len(finalDF)):
         numeroCTRCbruto = (finalDF.loc[i]['NUMERO CTRC'])
         numeroCTRC = re.findall(r'CWN00(\d{4})',numeroCTRCbruto)
         try:
-
-            finalDF.at[i,'NUMERO CT-E'] = dataFrameNotas.loc[dataFrameNotas[dataFrameNotas['CTRC'] == int(numeroCTRC[0])].index.values, 'NF'].values[0]
+            finalDF.at[i,'NUMERO CT-E'] = dataFrameNotas.loc[
+                dataFrameNotas[dataFrameNotas['CTRC'] == int(numeroCTRC[0])].index.values, 'NF'].values[0]
         except IndexError:
 
             print(numeroCTRC[0])
+
+finalDF.insert(5,"Filial", " ")
 
 finalDF.to_csv('PlanilhaTotal.csv', encoding = "ISO-8859-1", sep=';', index=False, header=True)
 
