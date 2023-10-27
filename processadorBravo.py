@@ -5,7 +5,6 @@ import glob
 import pandas as pd
 import threading as thr
 from tkinter import filedialog as fd
-
 from PIL import Image
 from pdf2image import convert_from_path
 
