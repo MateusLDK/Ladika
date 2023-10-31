@@ -13,8 +13,8 @@ class Processador():
     def __init__(self, folderPath):
         self.listaNotas = {}
         self.arquivosPDF = {}
-        self.poplerPath = "C:/Users/mladika/Documents/Python/Ladika/poppler/Library/Bin"
         self.arquivosJPG = {}
+        self.poplerPath = "C:/Users/mladika/Documents/Python/Ladika/poppler/Library/Bin"
         self.nfsPath = folderPath + '/NFs'
         self.xlsxPath = folderPath + '/Excel'
         pyt.pytesseract.tesseract_cmd = r"C:\Users\mladika\AppData\Local\Programs\Tesseract-OCR\tesseract.exe"
@@ -151,6 +151,6 @@ class Processador():
 
 if __name__ == "__main__":
     
-    folderPath = fd.askdirectory() 
+    folderPath = fd.askdirectory()
     dataFrameNotas = Processador(folderPath)
     dataFrameNotas.conversor()
