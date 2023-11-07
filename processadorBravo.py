@@ -122,7 +122,7 @@ class Processador():
         arquivosCSV = glob.glob(os.path.join(localArquivos, "*.csv"))
 
         for f in arquivosCSV:
-            
+
             tempDF = pd.read_csv(f, encoding = "ISO-8859-1", skiprows=[0], skipfooter=1, sep=';', usecols=colunasValidas, engine='python')
             tempDF2 = pd.concat([tempDF2, tempDF], ignore_index=False)
 

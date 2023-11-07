@@ -1,34 +1,48 @@
+from contextlib import suppress
 import pandas as pd
 from tkinter import filedialog as fd
+import os.path
+import glob
 
 finalDF = pd.DataFrame()
+tempDF2 = pd.DataFrame()
 
-#Abrir o seletor de arquivo do windows
-FilePath = fd.askopenfilename() 
+folderPath = fd.askdirectory()
+os.chdir(folderPath)
+localArquivos = os.getcwd()
+arquivosCSV = glob.glob(os.path.join(localArquivos, "*.csv"))
 
-#colunas que serão carregadas
-colunasValidas = ["Data Faturamento", "Fatura", "Nota Fiscal", "CTe", "Destinatario", "Cidade", 
+
+colunasCTE = ["Data Faturamento", "Fatura", "Nota Fiscal", "CTe", "Destinatario", "Cidade", 
                   "CEP", "UF", "Peso", "Valor NF", "Seguro", "Gris", "Frete", "ICMS", "Total Servico"]
+colunasNFe = ["Data Faturamento", "NF", "Nota Fiscal", "Destinatario", "Cidade", 
+                  "CEP", "UF", "Peso", "Valor NF", "Seguro", "Gris", "Frete", "Total Servico"]
 
-#ler arquivo CSV: Ignora a ultima linha e abre apenas as colunas selecionadas acima
-tempDF = pd.read_csv(FilePath, encoding = "ISO-8859-1", skipfooter=1, sep=';', usecols=colunasValidas, engine='python')
+for file in arquivosCSV:
+    try:
 
-#definindo as colunas numericas como INT para remover o .0 do final
-tempDF['Fatura']      = tempDF['Fatura'].astype(int)
-tempDF['Nota Fiscal'] = tempDF['Nota Fiscal'].astype(int)
-tempDF['CTe']         = tempDF['CTe'].astype(int)
+        tempDF = pd.read_csv(file, encoding = "ISO-8859-1", skipfooter=1, sep=';', usecols=colunasCTE, engine='python')
 
-#Reordenando as colunas
-finalDF = tempDF.loc[:,["Data Faturamento", "Fatura", "Nota Fiscal", "CTe", "Destinatario", "Cidade",
-                          "CEP", "UF", "Peso", "Valor NF", "Seguro", "Gris", "Frete", "ICMS", "Total Servico"]]
+    except ValueError:
 
-#adicionando duas colunas vazias na posição 1 e 5.
+        tempDF = pd.read_csv(file, encoding = "ISO-8859-1", skipfooter=1, sep=';', usecols=colunasNFe, engine='python')
+        tempDF.insert(1,"Fatura", " ")
+        tempDF.insert(13,"ICMS", 0)
+
+    with suppress(KeyError,ValueError):
+        tempDF['Fatura'] = tempDF['Fatura'].astype(int)
+        tempDF['Nota Fiscal'] = tempDF['Nota Fiscal'].astype(int)
+        tempDF['CTe'] = tempDF['CTe'].astype(int)
+        tempDF['Data Faturamento'] = pd.to_datetime(tempDF['Data Faturamento'],format='%d%b%Y')
+
+    tempDF2 = pd.concat([tempDF2, tempDF], ignore_index=False)
+
+
+finalDF = tempDF2.loc[:,["Data Faturamento", "Fatura", "Nota Fiscal", "CTe", "Destinatario", "Cidade",
+                        "CEP", "UF", "Peso", "Valor NF", "Seguro", "Gris", "Frete", "ICMS", "Total Servico"]]
 finalDF.insert(1,"Vencimento", " ")
 finalDF.insert(5,"Tipo", " ")
-
-#resetando o index após as alterações
 finalDF.reset_index(inplace=True)
-
-#adicionando o DataFrame em uma planilha CSV nova
-finalDF.to_csv('PlanilhaTotal.csv', encoding = "ISO-8859-1", sep=';', index=False, header=True)
+finalDF = finalDF.drop(6)
+finalDF.to_excel('PlanilhaTotal.xlsx',index=False, header=True)
 print("concluído!")
