@@ -25,24 +25,28 @@ for file in arquivosCSV:
 
     except ValueError:
 
-        tempDF = pd.read_csv(file, encoding = "ISO-8859-1", skipfooter=1, sep=';', usecols=colunasNFe, engine='python')
+        tempDF = pd.read_csv(file, encoding = "ISO-8859-1", skipfooter=2, sep=';', usecols=colunasNFe, engine='python')
         tempDF.insert(1,"Fatura", " ")
         tempDF.insert(13,"ICMS", 0)
+        qtdLinhas = len(tempDF)+1
 
+    
     with suppress(KeyError,ValueError):
         tempDF['Fatura'] = tempDF['Fatura'].astype(int)
+    with suppress(KeyError,ValueError):
         tempDF['Nota Fiscal'] = tempDF['Nota Fiscal'].astype(int)
+    with suppress(KeyError,ValueError):
         tempDF['CTe'] = tempDF['CTe'].astype(int)
+    with suppress(KeyError,ValueError):
         tempDF['Data Faturamento'] = pd.to_datetime(tempDF['Data Faturamento'],format='%d%b%Y')
 
-    tempDF2 = pd.concat([tempDF2, tempDF], ignore_index=False)
+    tempDF2 = pd.concat([tempDF2, tempDF], ignore_index=True)
 
 
 finalDF = tempDF2.loc[:,["Data Faturamento", "Fatura", "Nota Fiscal", "CTe", "Destinatario", "Cidade",
                         "CEP", "UF", "Peso", "Valor NF", "Seguro", "Gris", "Frete", "ICMS", "Total Servico"]]
 finalDF.insert(1,"Vencimento", " ")
 finalDF.insert(5,"Tipo", " ")
-finalDF.reset_index(inplace=True)
-finalDF = finalDF.drop(6)
+finalDF.reset_index(drop=True, inplace=True)
 finalDF.to_excel('PlanilhaTotal.xlsx',index=False, header=True)
 print("concluído!")

@@ -11,71 +11,32 @@ from pdf2image import convert_from_path
 class Processador():
 
     def __init__(self, folderPath):
+
+        global poplerPath
+
         self.listaNotas = {}
         self.arquivosPDF = {}
         self.arquivosJPG = {}
-        self.poplerPath = "C:/Users/mladika/Documents/Python/Ladika/poppler/Library/Bin"
         self.nfsPath = folderPath + '/NFs'
         self.xlsxPath = folderPath + '/Excel'
+        
+        poplerPath = "C:/Users/mladika/Documents/Python/Ladika/poppler/Library/Bin"
+
+        #self.nfsPath = os.getcwd()
+        
+        self.arquivosPDF = glob.glob(os.path.join(self.nfsPath, "*.pdf"))
+        self.arquivosJPG = glob.glob(os.path.join(self.nfsPath, "*.jpg"))
         pyt.pytesseract.tesseract_cmd = r"C:\Users\mladika\AppData\Local\Programs\Tesseract-OCR\tesseract.exe"
-
-    def conversor(self):
-
-        os.chdir(self.nfsPath)
-        localArquivos = os.getcwd()
-
-        self.arquivosPDF = glob.glob(os.path.join(localArquivos, "*.pdf"))
-
-        thread1 = thr.Thread(target = Processador.converterNotas(i = 0, numeroNota = 0 ))
-        thread2 = thr.Thread(target = Processador.converterNotas(i = 1, numeroNota = 10))
-        thread3 = thr.Thread(target = Processador.converterNotas(i = 2, numeroNota = 20))
-        thread4 = thr.Thread(target = Processador.converterNotas(i = 3, numeroNota = 30))
-
-        thread1.start()
-        thread2.start()
-        thread3.start()
-        thread4.start()
-
-        thread1.join()
-        thread2.join()
-        thread3.join()
-        thread4.join()
-
-        self.arquivosJPG = glob.glob(os.path.join(localArquivos, "*.jpg"))
-
-        thread1 = thr.Thread(target = Processador.processarNotas(k = 0))
-        thread2 = thr.Thread(target = Processador.processarNotas(k = 1))
-        thread3 = thr.Thread(target = Processador.processarNotas(k = 2))
-        thread4 = thr.Thread(target = Processador.processarNotas(k = 3))
-
-        thread1.start()
-        thread2.start()
-        thread3.start()
-        thread4.start()
-
-        thread1.join()
-        thread2.join()
-        thread3.join()  
-        thread4.join()
-
-        dataFrame = pd.DataFrame(data = self.listaNotas, index=[0])
-        dataFrame = (dataFrame.T)
-        dataFrame.reset_index(inplace=True)
-        dataFrame.columns = ['CTRC','NF']
-        dataFrame['CTRC'] = pd.to_numeric(dataFrame['CTRC'])
-        dataFrame['NF'] = pd.to_numeric(dataFrame['NF'])
-
-        Processador.processarExcel(dataFrame)
 
     def converterNotas(self, i, numeroNota):
 
         while True:
 
             try:
-                pages = convert_from_path(self.arquivosPDF[i], 350, poppler_path=self.popplerPath)
+                pages = convert_from_path(self.arquivosPDF[i], 350, poppler_path=poplerPath)
             except IndexError:
                 break
-            
+
             for page in pages:
                 image_name = "NF" + str(numeroNota) + ".jpg"
                 page.save(image_name, "JPEG")
@@ -92,7 +53,7 @@ class Processador():
                 img = Image.open(self.arquivosJPG[k])
             except (FileNotFoundError, IndexError):
                 break
-            
+
             text = pyt.image_to_string(img, config='--psm 11')
             numeroCTRC = re.findall(r'n°. (\d{4})', text)
             numeroNF = re.findall(r'CURITIBA\n\n(\d{4})', text)
@@ -150,7 +111,47 @@ class Processador():
         print("concluído!")
 
 if __name__ == "__main__":
-    
+
     folderPath = fd.askdirectory()
-    dataFrameNotas = Processador(folderPath)
-    dataFrameNotas.conversor()
+    conversor = Processador(folderPath)
+
+    os.chdir(conversor.nfsPath)
+
+    thread1 = thr.Thread(target = conversor.converterNotas(i = 0, numeroNota = 0))
+    thread2 = thr.Thread(target = conversor.converterNotas(i = 1, numeroNota = 10))
+    thread3 = thr.Thread(target = conversor.converterNotas(i = 2, numeroNota = 20))
+    thread4 = thr.Thread(target = conversor.converterNotas(i = 3, numeroNota = 30))
+
+    thread1.start()
+    thread2.start()
+    thread3.start()
+    thread4.start()
+
+    thread1.join()
+    thread2.join()
+    thread3.join()
+    thread4.join()
+
+    thread1 = thr.Thread(target = conversor.processarNotas(k = 0))
+    thread2 = thr.Thread(target = conversor.processarNotas(k = 1))
+    thread3 = thr.Thread(target = conversor.processarNotas(k = 2))
+    thread4 = thr.Thread(target = conversor.processarNotas(k = 3))
+
+    thread1.start()
+    thread2.start()
+    thread3.start()
+    thread4.start()
+
+    thread1.join()
+    thread2.join()
+    thread3.join()  
+    thread4.join()
+
+    dataFrame = pd.DataFrame(data = conversor.listaNotas, index=[0])
+    dataFrame = (dataFrame.T)
+    dataFrame.reset_index(inplace=True)
+    dataFrame.columns = ['CTRC','NF']
+    dataFrame['CTRC'] = pd.to_numeric(dataFrame['CTRC'])
+    dataFrame['NF'] = pd.to_numeric(dataFrame['NF'])
+
+    conversor.processarExcel(dataFrame)
