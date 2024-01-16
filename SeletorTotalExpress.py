@@ -30,7 +30,7 @@ for file in arquivosCSV:
         tempDF.insert(13,"ICMS", 0)
         qtdLinhas = len(tempDF)+1
 
-    
+
     with suppress(KeyError,ValueError):
         tempDF['Fatura'] = tempDF['Fatura'].astype(int)
     with suppress(KeyError,ValueError):
@@ -42,7 +42,7 @@ for file in arquivosCSV:
 
     tempDF2 = pd.concat([tempDF2, tempDF], ignore_index=True)
 
-
+print(tempDF2)
 finalDF = tempDF2.loc[:,["Data Faturamento", "Fatura", "Nota Fiscal", "CTe", "Destinatario", "Cidade",
                         "CEP", "UF", "Peso", "Valor NF", "Seguro", "Gris", "Frete", "ICMS", "Total Servico"]]
 finalDF.insert(1,"Vencimento", " ")

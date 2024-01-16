@@ -1,14 +1,16 @@
-import PyPDF2
-import re
+import PyPDF2, re, os
 import pandas as pd
-
 from tkinter import filedialog as fd
 
 dictFatura = {}
 dadosFatura = {}
 valorTemp = {}
 
-arquivoPDF = PyPDF2.PdfReader(open(fd.askopenfilename(),'rb'))
+arquivo = fd.askopenfilename()
+arquivoPDF = PyPDF2.PdfReader(open(arquivo,'rb'))
+endereco = os.path.split(arquivo)
+os.chdir(endereco[0])
+
 textoPaginaPDF = arquivoPDF.pages[0].extract_text()
 
 numeroDoc      = re.findall(r'Faturamento (\d{8})',                     textoPaginaPDF) #numeroDoc
@@ -23,15 +25,18 @@ dadosFatura[6] = re.findall(r'\d+,\d{2}\n (.+,\d{2})\n\d+ \d,\d{2}',    textoPag
 sequencia      = re.findall(r'\d+,\d{2}\n\d{5} (\d{1})\n',              textoPaginaPDF) #faturaSequencia
 
 dataFrame = pd.DataFrame(data=dadosFatura, index=None)
-dataFrame.insert(0,"Documento",'')
-dataFrame.insert(2,"Sequencia",sequencia)
-dataFrame.insert(9,"Vencimento",'')
 
-dataFrame.columns = ['Documento','Emissão','Sequencia','Cupom','NF','KM','Placa','Litros','Valor','Vencimento']
+dataFrame.columns = ['Emissão','Cupom','NF','KM','Placa','Litros','Valor']
+dataFrame['Documento']  = numeroDoc[0]
+dataFrame['Vencimento'] = vencimentoDoc[0]
+dataFrame["Sequencia"]  = sequencia
 
-dataFrame['Sequencia'] = pd.to_numeric(dataFrame['Sequencia'])
-dataFrame['Cupom'] = pd.to_numeric(dataFrame['Cupom'])
-dataFrame['NF'] = pd.to_numeric(dataFrame['NF'])
-dataFrame['KM'] = pd.to_numeric(dataFrame['KM'])
+finalDF = dataFrame.loc[:,['Documento','Emissão','Sequencia','Cupom','NF','KM','Placa','Litros','Valor','Vencimento']]
 
-dataFrame.to_excel('teste.xlsx')
+finalDF['Sequencia']    = pd.to_numeric(finalDF['Sequencia'])
+finalDF['Cupom']        = pd.to_numeric(finalDF['Cupom'])
+finalDF['NF']           = pd.to_numeric(finalDF['NF'])
+finalDF['KM']           = pd.to_numeric(finalDF['KM'])
+finalDF['Documento']    = pd.to_numeric(finalDF['Documento'])
+
+finalDF.to_excel('Pelanda.xlsx')

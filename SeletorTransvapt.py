@@ -1,10 +1,13 @@
 import pandas as pd
+import os
 from tkinter import filedialog as fd
 
 finalDF = pd.DataFrame()
 colunasValidas = ["Nr.CT-e", "Unnamed: 2", "EMISSÃO", "CLIENTE REMETENTE", "CLIENTE DESTINATÁRIO", "CIDADE DESTINO", "FRETE TOTAL"]
 
-FilePath = fd.askopenfilename() 
+FilePath = fd.askopenfilename()
+endereco = os.path.split(FilePath)
+os.chdir(endereco[0])
 
 transvaptDF = pd.read_excel(FilePath)
 validade = transvaptDF.loc[1,'Unnamed: 16']
@@ -20,5 +23,5 @@ finalDF = transvaptDF.loc[:,["EMISSÃO", "CTE", "CLIENTE DESTINATÁRIO", 'NF', "
 finalDF.insert(7,"Vencimento", validade)
 finalDF.reset_index(inplace=True)
 
-finalDF.to_excel('PlanilhaTransvapt.csv', index=False, header=True)
+finalDF.to_excel('PlanilhaTransvapt.xlsx', index=False, header=True)
 print("concluído!")
