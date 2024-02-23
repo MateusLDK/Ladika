@@ -9,7 +9,7 @@ FilePath = fd.askopenfilename()
 endereco = os.path.split(FilePath)
 os.chdir(endereco[0])
 
-transvaptDF = pd.read_excel(FilePath)
+transvaptDF = pd.read_excel(FilePath, decimal=',', thousands='.')
 validade = transvaptDF.loc[1,'Unnamed: 16']
 
 transvaptDF = pd.read_excel(FilePath, skiprows=4 ,skipfooter=9, usecols=colunasValidas)
@@ -23,5 +23,5 @@ finalDF = transvaptDF.loc[:,["EMISSÃO", "CTE", "CLIENTE DESTINATÁRIO", 'NF', "
 finalDF.insert(7,"Vencimento", validade)
 finalDF.reset_index(inplace=True)
 
-finalDF.to_excel('PlanilhaTransvapt.xlsx', index=False, header=True)
+finalDF.to_excel('PlanilhaTransvapt1.xlsx', index=False, header=True)
 print("concluído!")

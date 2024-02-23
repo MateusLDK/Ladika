@@ -5,6 +5,7 @@ from tkinter import filedialog as fd
 dictFatura = {}
 dadosFatura = {}
 valorTemp = {}
+listaCaminhoes = ['HEM3C47','ATW5B14','AQI6E66']
 
 arquivo = fd.askopenfilename()
 arquivoPDF = PyPDF2.PdfReader(open(arquivo,'rb'))
@@ -26,7 +27,7 @@ sequencia      = re.findall(r'\d+,\d{2}\n\d{5} (\d{1})\n',              textoPag
 
 dataFrame = pd.DataFrame(data=dadosFatura, index=None)
 
-dataFrame.columns = ['Emissão','Cupom','NF','KM','Placa','Litros','Valor']
+dataFrame.columns       = ['Emissão','Cupom','NF','KM','Placa','Litros','Valor']
 dataFrame['Documento']  = numeroDoc[0]
 dataFrame['Vencimento'] = vencimentoDoc[0]
 dataFrame["Sequencia"]  = sequencia
@@ -39,4 +40,8 @@ finalDF['NF']           = pd.to_numeric(finalDF['NF'])
 finalDF['KM']           = pd.to_numeric(finalDF['KM'])
 finalDF['Documento']    = pd.to_numeric(finalDF['Documento'])
 
-finalDF.to_excel('Pelanda.xlsx')
+dfCaminhoes = finalDF[(finalDF['Placa']=='ATW5B14') | (finalDF['Placa']=='HEM3C47') | (finalDF['Placa']=='AQI6E66')]
+dfCarros    = finalDF[(finalDF['Placa']!='ATW5B14') & (finalDF['Placa']!='HEM3C47') & (finalDF['Placa']!='AQI6E66')]
+
+dfCaminhoes.to_excel('Caminhoes.xlsx')
+dfCarros.to_excel('Outros.xlsx')

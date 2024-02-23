@@ -4,6 +4,7 @@ import os.path
 import glob
 import pandas as pd
 import threading as thr
+from time import sleep
 from tkinter import filedialog as fd
 from PIL import Image
 from pdf2image import convert_from_path
@@ -131,6 +132,8 @@ if __name__ == "__main__":
     thread2.join()
     thread3.join()
     thread4.join()
+
+    sleep(5)
 
     thread1 = thr.Thread(target = conversor.processarNotas(k = 0))
     thread2 = thr.Thread(target = conversor.processarNotas(k = 1))
