@@ -38,15 +38,15 @@ for file in arquivosCSV:
     with suppress(KeyError,ValueError):
         tempDF['CTe'] = tempDF['CTe'].astype(int)
     with suppress(KeyError,ValueError):
-        tempDF['Data Faturamento'] = pd.to_datetime(tempDF['Data Faturamento'],format='%d%b%Y')
+        tempDF['Data Faturamento'] = pd.to_datetime(tempDF['Data Faturamento'],format='%d%m%Y')
 
     tempDF2 = pd.concat([tempDF2, tempDF], ignore_index=True)
 
 print(tempDF2)
-finalDF = tempDF2.loc[:,["Data Faturamento", "Fatura", "Nota Fiscal", "CTe", "Destinatario", "Cidade",
+finalDF = tempDF2.loc[:,["Data Faturamento", "Nota Fiscal", "CTe", "Destinatario", "Cidade",
                         "CEP", "UF", "Peso", "Valor NF", "Seguro", "Gris", "Frete", "ICMS", "Total Servico"]]
 finalDF.insert(1,"Vencimento", " ")
-finalDF.insert(5,"Tipo", " ")
+finalDF.insert(4,"Tipo", " ")
 finalDF.reset_index(drop=True, inplace=True)
 finalDF.to_excel('PlanilhaTotal.xlsx',index=False, header=True)
 print("concluído!")
