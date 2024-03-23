@@ -26,7 +26,7 @@ class Processador():
         #self.nfsPath = os.getcwd()
         
         self.arquivosPDF = glob.glob(os.path.join(self.nfsPath, "*.pdf"))
-        self.arquivosJPG = glob.glob(os.path.join(self.nfsPath, "*.jpg"))
+        #self.arquivosJPG = glob.glob(os.path.join(self.nfsPath, "*.jpg"))
         pyt.pytesseract.tesseract_cmd = r"C:\Users\mladika\AppData\Local\Programs\Tesseract-OCR\tesseract.exe"
 
     def converterNotas(self, i, numeroNota):
@@ -48,6 +48,7 @@ class Processador():
 
     def processarNotas(self, k):
 
+        self.arquivosJPG = glob.glob(os.path.join(self.nfsPath, "*.jpg"))
         while True:
 
             try:
