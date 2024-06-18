@@ -77,7 +77,7 @@ class Processador():
         tempDF2 = pd.DataFrame()
 
         colunasValidas = ["NUMERO CTRC", "NUMERO CT-E", "PLACA DE COLETA", "CLIENTE REMETENTE",	"CLIENTE DESTINATARIO",	"ENDERECO RECEBEDOR", 
-                        "CIDADE ENTREGA", "UF ENTREGA", "CEP ENTREGA", "NOTA FISCAL", "FRETE PESO", "OUTROS", "VAL RECEBER", 
+                        "CIDADE ENTREGA", "UF ENTREGA", "CEP ENTREGA", "ENDERECO RECEBEDOR", "NOTA FISCAL", "FRETE PESO", "OUTROS", "VAL RECEBER", 
                         "NUMERO DA FATURA", "DATA ENTREGA", "IMPOSTOS REPAS", "ICMS TRANSP"]
 
         os.chdir(self.xlsxPath)
@@ -90,7 +90,7 @@ class Processador():
             tempDF2 = pd.concat([tempDF2, tempDF], ignore_index=False)
 
         finalDF = tempDF2.loc[:,["NUMERO DA FATURA", "NOTA FISCAL", "NUMERO CTRC", "NUMERO CT-E", "DATA ENTREGA",  
-                                    "CLIENTE REMETENTE", "CLIENTE DESTINATARIO", "PLACA DE COLETA", "ENDERECO RECEBEDOR", "CIDADE ENTREGA", "UF ENTREGA", 
+                                    "CLIENTE REMETENTE", "CLIENTE DESTINATARIO", "PLACA DE COLETA", "ENDERECO RECEBEDOR", "CEP ENTREGA", "CIDADE ENTREGA", "UF ENTREGA", 
                                     "FRETE PESO", "OUTROS", "VAL RECEBER"]]
 
         finalDF.reset_index(inplace=True)
@@ -109,7 +109,7 @@ class Processador():
                     print(numeroCTRC[0])
 
         finalDF.insert(5,"Filial", " ")
-        finalDF.to_csv('PlanilhaBravo.csv', encoding = "ISO-8859-1", sep=';', index=False, header=True)
+        finalDF.to_excel('PlanilhaBravo.xlsx',index=False, header=True)
         print("concluído!")
 
 if __name__ == "__main__":
