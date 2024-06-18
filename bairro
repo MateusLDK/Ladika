@@ -1,0 +1,15 @@
+import requests
+
+cep = "81030000"
+
+if len(cep) == 8:
+    link = f'https://viacep.com.br/ws/{cep}/json/'
+
+    requisicao = requests.get(link)
+    dic_requisicao = requisicao.json()
+
+    bairro = dic_requisicao['bairro']
+    
+    print(bairro)
+else:
+    print("CEP Inválido")
