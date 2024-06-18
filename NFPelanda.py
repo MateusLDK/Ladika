@@ -31,19 +31,6 @@ for i in range(len(dadosFatura[2])):
 
 del dadosFatura[7]
 
-x=0
-while(True):
-    try:
-        if len(dadosFatura[x]) < len(dadosFatura[0]):
-            dadosFatura[x].insert(0, "")
-        x+=1
-    
-    except(KeyError):
-        break
-
-if len(sequencia) < len(dadosFatura[0]):
-    sequencia.insert(0,1)
-
 dataFrameBase = pd.DataFrame(data=dadosFatura, index=None)
 
 dataFrameBase.columns       = ['KM','Emissão','Cupom','NF','Placa','Litros','Valor']
