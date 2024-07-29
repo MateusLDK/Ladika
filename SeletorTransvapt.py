@@ -12,6 +12,7 @@ folderPath = fd.askdirectory()
 os.chdir(folderPath)
 localArquivos = os.getcwd()
 arquivosXLS = glob.glob(os.path.join(localArquivos, "*.xls"))
+print(arquivosXLS)
 
 for file in arquivosXLS:
 
