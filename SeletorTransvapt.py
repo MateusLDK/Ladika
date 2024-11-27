@@ -29,7 +29,6 @@ for file in arquivosXLS:
     transvaptDF.reset_index(inplace=True)
     tempDF2 = pd.concat([tempDF2, transvaptDF], ignore_index=True)
 
-
 finalDF = tempDF2.loc[:,["EMISSÃO", "CTE", "CLIENTE DESTINATÁRIO", 'NF', "CIDADE","UF", "FRETE TOTAL"]]
 finalDF.insert(7,"Vencimento", validade)
 finalDF.to_excel('PlanilhaTransvapt.xlsx', index=False, header=True)
