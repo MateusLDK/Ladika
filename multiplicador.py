@@ -4,8 +4,7 @@ from tkinter import filedialog as fd
 
 folderPath = fd.askopenfilename()
 
-df = pd.read_excel(folderPath)
-
+df = pd.read_csv(folderPath, sep=';')
 
 # Estrutura de Tamanho e Curva
 tamanho_curva = {
